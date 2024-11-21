@@ -1,5 +1,6 @@
 package aed.gestion_fct;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,9 +9,7 @@ import java.sql.Statement;
 
 public class GestionApp {
 
-    // ALUMNO
-    
-    // Insertar alumno
+    // Insertar
     public void createAlumno(String nombre, String programa, String telefono, String correo) {
         // Validaciones
         if (telefono != null && !telefono.matches("^[0-9 ]+$")) {
@@ -40,7 +39,7 @@ public class GestionApp {
         }
     }
 
-    // Leer alumno
+    // Leer
     public void leerAlumno() {
         String query = "SELECT * FROM alumno";
 
@@ -61,7 +60,7 @@ public class GestionApp {
         }
     }
 
-    // Modificar alumno
+    // Modificar
     public void actualizarAlumno(int id_alumno, String nombre, String programa, String telefono, String correo) {
         // Validaciones
         if (telefono != null && !telefono.matches("^[0-9 ]+$")) {
@@ -92,7 +91,6 @@ public class GestionApp {
         }
     }
 
-    // Borrar Alumno
     public void borrarAlumno(int id_alumno) {
 
         String deleteQuery = "DELETE FROM alumno WHERE id_alumno = ?";
@@ -109,6 +107,99 @@ public class GestionApp {
         }
     }
     
+    // CRUD tutordocente
+    public void crearTutorDocente(String nombre, String telefono, String correo) {
+        // Restricciones reutilizadas de alumno
+        if (telefono != null && !telefono.matches("^[0-9 ]+$")) {
+            throw new IllegalArgumentException("El teléfono solo puede contener números y espacios.");
+        }
+        
+        if (correo != null && !correo.contains("@")) {
+            throw new IllegalArgumentException("El correo debe contener un '@'.");
+        }
+        
+        String insertQuery = "INSERT INTO tutordocente (nombre, telefono, correo) VALUES (?, ?, ?)";
+
+        try (Connection connection = ConnectionPool.getConnection(); // Usar el pool
+                 PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+
+            preparedStatement.setString(1, nombre);
+            preparedStatement.setString(2, telefono);
+            preparedStatement.setString(3, correo);
+
+            int filasAfectadas = preparedStatement.executeUpdate();
+            System.out.println("Tutor docente creado. Filas afectadas: " + filasAfectadas);
+
+        } catch (SQLException e) {
+            System.err.println("Error al crear tutor docente: " + e.getMessage());
+        }
+        
+        
+    }
+    
+    public void leerTutorDocente() {
+        String query = "SELECT * FROM tutordocente";
+
+        try (Connection connection = ConnectionPool.getConnection(); // Usar el pool
+                 Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(query)) {
+
+            while (resultSet.next()) {
+                System.out.println("ID: " + resultSet.getInt("id_tutor_docente"));
+                System.out.println("Nombre: " + resultSet.getString("nombre"));
+                System.out.println("Teléfono: " + resultSet.getString("telefono"));
+                System.out.println("Correo: " + resultSet.getString("correo"));
+                System.out.println("-----------------------------------");
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al leer los tutores docentes: " + e.getMessage());
+        }
+    }
+    
+    public void actualizarTutorDocente(int id, String nombre, String telefono, String correo) {
+        // Restricciones reutilizadas de alumno
+        if (telefono != null && !telefono.matches("^[0-9 ]+$")) {
+            throw new IllegalArgumentException("El teléfono solo puede contener números y espacios.");
+        }
+
+       
+        if (correo != null && !correo.contains("@")) {
+            throw new IllegalArgumentException("El correo debe contener un '@'.");
+        }
+
+        String updateQuery = "UPDATE tutordocente SET nombre = ?, telefono = ?, correo = ? WHERE id_tutor_docente = ?";
+
+        try (Connection connection = ConnectionPool.getConnection(); // Usar el pool
+                 PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
+
+            preparedStatement.setString(1, nombre);
+            preparedStatement.setString(2, telefono);
+            preparedStatement.setString(3, correo);
+            preparedStatement.setInt(4, id);
+
+            int filasAfectadas = preparedStatement.executeUpdate();
+            System.out.println("Tutor docente actualizado. Filas afectadas: " + filasAfectadas);
+
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar al tutor docente: " + e.getMessage());
+        }
+    }
+    
+    public void eliminarTutorDocente(int id) {
+        String deleteQuery = "DELETE FROM tutordocente WHERE id_tutor_docente = ?";
+
+        try (Connection connection = ConnectionPool.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)) {
+
+            preparedStatement.setInt(1, id);
+
+            int filasAfectadas = preparedStatement.executeUpdate();
+            System.out.println("Tutor docente eliminado. Filas afectadas: " + filasAfectadas);
+
+        } catch (SQLException e) {
+            System.err.println("Error al eliminar al tutor docente: " + e.getMessage());
+        }
+    }
+
     // EMPRESA
     
     // Crear Empresa
@@ -307,4 +398,5 @@ public class GestionApp {
             System.err.println("Error al eliminar el Tutor Empresa: " + e.getMessage());
         }
     }
+    
 }

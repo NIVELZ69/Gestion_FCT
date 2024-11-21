@@ -50,6 +50,10 @@ public class Main {
                                 nombre = sc.nextLine();
                                 System.out.println("Programa: ");
                                 programa = sc.nextLine();
+                                System.out.println("Telefono: ");
+                                telefono = sc.nextLine();
+                                System.out.println("Correo: ");
+                                correo = sc.nextLine();
 
                                 // Validar teléfono
                                 do {
@@ -114,6 +118,94 @@ public class Main {
                         }
 
                     } while (opcionAlumno != 5);
+
+                    break;
+                    
+                case 4:
+                    
+                    int opcionTutorDocente;
+                    String nombreTutorDocente;
+                    String telefonoTutorDocente;
+                    String correoTutorDocente;
+                    int id_tutor_docente;
+
+                    do {
+                        System.out.println("\n--- Menú ---");
+                        System.out.println("1. Crear tutor docente");
+                        System.out.println("2. Leer tutor docente");
+                        System.out.println("3. Modificar tutor docente");
+                        System.out.println("4. Borrar tutor docente");
+                        System.out.println("5. Volver");
+                        System.out.print("Seleccione una opción: ");
+                        opcionTutorDocente = sc.nextInt();
+                        sc.nextLine(); // Limpiar el buffer
+
+                        switch (opcionTutorDocente) {
+                            case 1:
+                                System.out.println("Nombre: ");
+                                nombreTutorDocente = sc.nextLine();
+
+                                // Validar teléfono
+                                do {
+                                    System.out.println("Teléfono (Solo números): ");
+                                    telefonoTutorDocente = sc.nextLine();
+                                    if (!telefonoTutorDocente.matches("^[0-9 ]+$")) {
+                                        System.out.println("El teléfono solo puede contener números y espacios.");
+                                    }
+                                } while (!telefonoTutorDocente.matches("^[0-9 ]+$"));
+
+                                // Validar correo
+                                do {
+                                    System.out.println("Correo (Debe contener @): ");
+                                    correoTutorDocente = sc.nextLine();
+                                    if (!correoTutorDocente.contains("@")) {
+                                        System.out.println("El correo debe contener un '@'.");
+                                    }
+                                } while (!correoTutorDocente.contains("@"));
+
+                                gestionApp.crearTutorDocente(nombreTutorDocente, telefonoTutorDocente, correoTutorDocente);
+                                break;
+
+                            case 2:
+                                gestionApp.leerTutorDocente();
+                                break;
+
+                            case 3:
+                                System.out.println("ID del tutor docente a modificar: ");
+                                id_tutor_docente = sc.nextInt();
+                                sc.nextLine();
+                                System.out.println("Nombre: ");
+                                nombreTutorDocente = sc.nextLine();
+
+                                // Validar teléfono
+                                do {
+                                    System.out.println("Teléfono (Solo números): ");
+                                    telefonoTutorDocente = sc.nextLine();
+                                    if (!telefonoTutorDocente.matches("^[0-9 ]+$")) {
+                                        System.out.println("El teléfono solo puede contener números y espacios.");
+                                    }
+                                } while (!telefonoTutorDocente.matches("^[0-9 ]+$"));
+
+                                // Validar correo
+                                do {
+                                    System.out.println("Correo (Debe contener @): ");
+                                    correoTutorDocente = sc.nextLine();
+                                    if (!correoTutorDocente.contains("@")) {
+                                        System.out.println("El correo debe contener un '@'.");
+                                    }
+                                } while (!correoTutorDocente.contains("@"));
+
+                                gestionApp.actualizarTutorDocente(id_tutor_docente, nombreTutorDocente, telefonoTutorDocente, correoTutorDocente);
+                                break;
+
+                            case 4:
+                                System.out.println("ID del tutor docente a eliminar: ");
+                                id_tutor_docente = sc.nextInt();
+                                gestionApp.borrarAlumno(id_tutor_docente);
+                                break;
+                        }
+
+                    } while (opcionTutorDocente != 5);
 
                     break;
 
